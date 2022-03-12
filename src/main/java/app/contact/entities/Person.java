@@ -14,11 +14,18 @@ public class Person {
 	
 	public Person() {}
 	
-	public Person(String firstName, String lastName, String nickName, String phoneNumber, String address, String emailAddress,
-			LocalDate birthDate) {		
+	public Person(String lastName, String firstName, String nickName, String phoneNumber, String address, String emailAddress,
+			LocalDate birthDate) {
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.nickName = nickName;
+		this.phoneNumber = phoneNumber;
+		this.emailAddress = emailAddress;
+		this.address = address;
+		this.birthDate = birthDate;
 	}
 	
-	public Person(int id, String firstName, String lastName, String nickName, String phoneNumber, String address, String emailAddress,
+	public Person(int id, String lastName, String firstName, String nickName, String phoneNumber, String address, String emailAddress,
 			LocalDate birthDate) {
 		this.id = id;
 		this.firstName = firstName;
