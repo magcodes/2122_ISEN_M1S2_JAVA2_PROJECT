@@ -12,7 +12,10 @@ public class Person {
 	private String address;
 	private LocalDate birthDate;
 	
-	public Person() {		
+	public Person() {}
+	
+	public Person(String firstName, String lastName, String nickName, String phoneNumber, String emailAddress,
+			String address, LocalDate birthDate) {		
 	}
 	
 	public Person(int id, String firstName, String lastName, String nickName, String phoneNumber, String emailAddress,
