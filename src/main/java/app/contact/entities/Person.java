@@ -8,18 +8,18 @@ public class Person {
 	private String lastName;
 	private String nickName;
 	private String phoneNumber;
-	private String emailAddress;
 	private String address;
+	private String emailAddress;
 	private LocalDate birthDate;
 	
 	public Person() {}
 	
-	public Person(String firstName, String lastName, String nickName, String phoneNumber, String emailAddress,
-			String address, LocalDate birthDate) {		
+	public Person(String firstName, String lastName, String nickName, String phoneNumber, String address, String emailAddress,
+			LocalDate birthDate) {		
 	}
 	
-	public Person(int id, String firstName, String lastName, String nickName, String phoneNumber, String emailAddress,
-			String address, LocalDate birthDate) {
+	public Person(int id, String firstName, String lastName, String nickName, String phoneNumber, String address, String emailAddress,
+			LocalDate birthDate) {
 		this.id = id;
 		this.firstName = firstName;
 		this.lastName = lastName;
