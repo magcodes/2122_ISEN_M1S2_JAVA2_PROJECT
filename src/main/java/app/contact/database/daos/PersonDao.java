@@ -18,7 +18,7 @@ public class PersonDao {
 	    List<Person> listOfPersons = new ArrayList<Person>();
 	    try (Connection connection = Database.getConnection()) {
 	        try (Statement statement = connection.createStatement()) {
-	            try (ResultSet results = statement.executeQuery("SELECT * FROM persons")) {
+	            try (ResultSet results = statement.executeQuery("SELECT * FROM person")) {
 	                while (results.next()) {
 	                    listOfPersons.add(new Person(results.getInt("idperson"),
 	                                            results.getString("lastname"),
@@ -28,7 +28,6 @@ public class PersonDao {
 	                                            results.getString("address"),
 	                                            results.getString("email_address"),
 	                                            results.getDate("birth_date").toLocalDate()));
-	
 	                }
 	            }
 	        }
@@ -74,10 +73,34 @@ public class PersonDao {
 	    return null;
 	}
 	
-	public void deletePerson(Integer id) {
+	public void updatePerson(Person person) {
+		try (Connection connection = Database.getConnection()) {
+	        try (PreparedStatement statement = connection.prepareStatement("UPDATE person SET firstname=?, lastname=?, nickname=?, phone_number=?, "
+	        		+ "address=?, email_address=?, birth_date=? WHERE idperson=?")) {
+	            statement.setString(1, person.getFirstName());
+	            statement.setString(2, person.getLastName());
+	            statement.setString(3, person.getNickName());
+	            statement.setString(4, person.getPhoneNumber());
+	            statement.setString(5, person.getAddress());
+	            statement.setString(6, person.getEmailAddress());
+	            statement.setDate(7, Date.valueOf(person.getBirthDate()));
+	            statement.setInt(8, person.getId());
+	            statement.executeUpdate();
+	        }
+	    }catch (SQLException e) {
+	        // Manage Exception
+	        e.printStackTrace();
+	    }
+	    catch (Exception e) {
+	    	//Manage All Exceptions
+	    	e.printStackTrace();
+	    }
+	}
+	
+	public void deletePerson(Person person) {
 	    try (Connection connection = Database.getConnection()) {
 	        try (PreparedStatement statement = connection.prepareStatement("DELETE FROM person WHERE idperson=?")) {
-	            statement.setInt(1, id);
+	            statement.setInt(1, person.getId());
 	            statement.executeUpdate();
 	        }
 	    }catch (SQLException e) {
