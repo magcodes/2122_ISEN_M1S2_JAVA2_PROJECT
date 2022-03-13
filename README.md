@@ -1,11 +1,11 @@
 # Java 2: Project - Contact App
-#Work done:
+# Work done:
 -SQL table remains unchanged
-# Functional requirements:
+## Functional requirements:
 All the functional requirements are done.
-# None functional requirements:
+## None functional requirements:
 All non-functional requirements are done.
-# Notes:
+## Notes:
 - vCard files are saved to the root of the project
 - Code is commented
 # List of group members
