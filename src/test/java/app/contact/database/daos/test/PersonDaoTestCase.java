@@ -14,13 +14,14 @@ import org.junit.Before;
 import org.junit.Test;
 
 import app.contact.database.Database;
+import app.contact.database.daos.MyPersonDao;
 import app.contact.database.daos.PersonDao;
 import app.contact.entities.Person;
 
 public class PersonDaoTestCase {
 	
+//	private MyPersonDao personDao = new MyPersonDao();
 	private PersonDao personDao = new PersonDao();
-	
 	@Before
 	public void initTest(){
 		Database.initDb();
@@ -83,7 +84,7 @@ public class PersonDaoTestCase {
 	}
 	
 	@Test
-	public void updateAddPerson() {
+	public void shouldUpdatePerson() {
 		//WHEN
 		personDao.updatePerson(new Person(1, "Curie", "Pierre", "PC", "+33756332211", "en France", "pierrecurie@pierrecurie.com", LocalDate.of(1922,7,2)));
 		//THEN
@@ -112,7 +113,7 @@ public class PersonDaoTestCase {
 	}
 	
 	@Test
-	public void deleteAddPerson() {
+	public void shouldDeletePerson() {
 		//WHEN
 		personDao.deletePerson(new Person(2, "Dupont", "Jean", "JDu", "+33757894561", "partout", "jeandupont@gmail.com", LocalDate.of(1789,7,14)));
 		//THEN
