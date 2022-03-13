@@ -14,7 +14,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import app.contact.database.Database;
-import app.contact.database.daos.MyPersonDao;
+//import app.contact.database.daos.MyPersonDao;
 import app.contact.database.daos.PersonDao;
 import app.contact.entities.Person;
 
