@@ -1,5 +1,11 @@
 package app.contact.database.daos;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.DirectoryStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -11,9 +17,11 @@ import java.util.List;
 
 import app.contact.database.Database;
 import app.contact.entities.Person;
+import app.contact.vcard.VcardSaver;
 
 public class PersonDao {
-
+	private VcardSaver vcardSaver = new VcardSaver();
+	
 	public List<Person> listPersons() {
 	    List<Person> listOfPersons = new ArrayList<Person>();
 	    try (Connection connection = Database.getConnection()) {
@@ -57,7 +65,7 @@ public class PersonDao {
 	            statement.executeUpdate();
 	            try ( ResultSet ids = statement.getGeneratedKeys()) {
 	            	if (ids.next()) {
-		                return new Person(ids.getInt(1), person.getFirstName(),person.getLastName(), person.getNickName(),
+		                return new Person(ids.getInt(1), person.getLastName(),person.getFirstName(), person.getNickName(),
 		                		person.getPhoneNumber(), person.getAddress(), person.getEmailAddress(), person.getBirthDate());
 		            }
 	            }
@@ -111,5 +119,23 @@ public class PersonDao {
 	    	//Manage All Exceptions
 	    	e.printStackTrace();
 	    }
+	}
+	
+	public void exportPersons() {
+		DirectoryStream<Path> listOfPaths;
+		try {
+			listOfPaths = Files.newDirectoryStream(Paths.get(new File(".").getAbsolutePath()));
+			for(Path file: listOfPaths) {
+				String filename = file.getFileName().toString();
+				int indexOfPeriod = filename.lastIndexOf(".");
+				if(filename.substring(++indexOfPeriod).equals("vcf")) {
+					Files.delete(file);
+				}
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		new PersonDao().listPersons().stream().forEach(vcardSaver::save);
 	}
 }

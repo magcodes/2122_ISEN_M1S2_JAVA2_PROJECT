@@ -43,6 +43,12 @@ public class Person {
 	public void setId(int id) {
 		this.id = id;
 	}
+	public String getNames() {
+		return (lastName+" "+firstName);
+	}
+	public String getFullName() {
+		return (firstName+" "+lastName);
+	}
 	public String getFirstName() {
 		return firstName;
 	}

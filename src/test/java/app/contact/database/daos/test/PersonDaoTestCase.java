@@ -3,6 +3,12 @@ package app.contact.database.daos.test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.tuple;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.DirectoryStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -10,6 +16,7 @@ import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.List;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -32,6 +39,21 @@ public class PersonDaoTestCase {
 						+ "VALUES (1, 'Curie', 'Marie', 'MC', '+33751122334', 'vie apres la mort', 'N/A', '1867-11-7 12:00:00.000')");
 				stmt.executeUpdate("INSERT INTO person(idperson,lastname,firstname,nickname,phone_number,address,email_address,birth_date) "
 						+ "VALUES (2, 'Dupont', 'Jean', 'JDu', '+33757894561', 'partout', 'jeandupont@gmail.com', '1789-07-14 12:00:00.000')");			
+			}
+		}
+		catch(SQLException e) {
+			e.printStackTrace();
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@After
+	public void cleanupTest() {
+		try(Connection connection = Database.getConnection()){
+			try(Statement stmt = connection.createStatement()){
+				stmt.executeUpdate("DELETE FROM person");			
 			}
 		}
 		catch(SQLException e) {
@@ -131,5 +153,30 @@ public class PersonDaoTestCase {
 			e.printStackTrace();
 		}
 	}
+	
+	@Test
+	public void shouldExportPersons() {
+		//WHEN 
+		personDao.exportPersons();
+		//THEN
+		int count = 0;
+		DirectoryStream<Path> listOfPaths;
+		try {
+			listOfPaths = Files.newDirectoryStream(Paths.get(new File(".").getAbsolutePath()));
+			for(Path file: listOfPaths) {
+				String filename = file.getFileName().toString();
+				int indexOfPeriod = filename.lastIndexOf(".");
+				if(filename.substring(++indexOfPeriod).equals("vcf")) {
+					count++;
+				}
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}			
+		assertThat(count).isEqualTo(2);
+	}
+	
+	
 
 }
