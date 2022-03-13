@@ -22,60 +22,64 @@ import javafx.fxml.FXML;
 public class PrimaryController {
 
 	@FXML
-	TableView<Person> personsTable;
+	TableView<Person> personsTable; //Declare TableView
 	
 	@FXML
-	TableColumn<Person, String> personsColumn;
+	TableColumn<Person, String> personsColumn; //Declare TableColumn
 
 	@FXML
-	AnchorPane formPane;
+	AnchorPane formPane; //Declare FormPane
 
 	@FXML
-	TextField nameField;
+	TextField nameField; //Declare TextField for the last name
 
 	@FXML
-	TextField adressField;
+	TextField adressField; //Declare TextField
 
 	@FXML
-	TextField mailAdressField;
+	TextField mailAdressField; //Declare TextField
 
 	@FXML
-	TextField firstNameField;
+	TextField firstNameField; //Declare TextField
 	
 	@FXML
-	TextField nickNameField;
+	TextField nickNameField; //Declare TextField
 	
 	@FXML
-	TextField phoneNumberField;
+	TextField phoneNumberField; //Declare TextField
 
 	@FXML
-	DatePicker birthDateField;
+	DatePicker birthDateField; //Declare DatePicker
 	
 	@FXML
-	Button saveButton;
+	Button newButton; //Declare Button
 	
 	@FXML
-	Button deleteButton;
+	Button saveButton; //Declare Button
+	
+	@FXML
+	Button deleteButton; //Declare Button
+	
 	
 
-	Person currentPerson = new Person();
-	private ObservableList<Person> contacts = FXCollections.observableArrayList();
+	Person currentPerson = new Person(); //Declare attribute to hold current selected person
+	private ObservableList<Person> contacts = FXCollections.observableArrayList(); //list in the TableView
 
-	private PersonDao personDao = new PersonDao();
+	private PersonDao personDao = new PersonDao(); //Data access object for the persons
 
 	
     @FXML
-    private void closeApp() throws IOException {
+    private void closeApp() throws IOException {  //to close the application
     	Platform.exit();
     }
     
     @FXML
-    private void export() throws IOException {
+    private void export() throws IOException { //to export all contacts to the root location of the project
     	personDao.exportPersons();
     }
     
     @FXML
-    private void handleDelete() throws IOException {
+    private void handleDelete() throws IOException { // to delete selected person
 		System.out.println(this.currentPerson.getId());
     	personDao.deletePerson(currentPerson);
     	this.populateList();
@@ -83,7 +87,7 @@ public class PrimaryController {
     }
     
     @FXML
-    private void handleSave() throws IOException {
+    private void handleSave() throws IOException { //to save modifications to selected person
     	this.currentPerson.setLastName(this.nameField.getText());
     	this.currentPerson.setFirstName(this.firstNameField.getText());
     	this.currentPerson.setNickName(this.nickNameField.getText());
@@ -98,20 +102,21 @@ public class PrimaryController {
     }
     
     @FXML
-    private void handleAdd() throws IOException {
+    private void handleAdd() throws IOException { //to add new person
     	Person person = personDao.addPerson(new Person(this.nameField.getText(), this.firstNameField.getText(), this.nickNameField.getText(),
     			this.phoneNumberField.getText(), this.adressField.getText(),this.mailAdressField.getText(), this.birthDateField.getValue()));
 		this.populateList();
+		this.personsTable.getSelectionModel().clearSelection();
     	this.personsTable.getSelectionModel().select(person);
     }
     
-	private void refreshList() {
+	private void refreshList() { //to refresh the TableView and clear selection
 		this.personsTable.refresh();
 		this.personsTable.getSelectionModel().clearSelection();
 	}
 
 
-	private void populateList() {
+	private void populateList() { //to fill TableView with updated contents of the database
 		contacts.clear();
 		personDao.listPersons().stream().forEach(contacts::add);
 		this.personsTable.setItems(contacts);
@@ -119,7 +124,7 @@ public class PrimaryController {
 	}
 
 	@FXML
-	private void initialize() {
+	private void initialize() { //to initialize the page
 		Database.initDb();
 		this.personsColumn.setCellValueFactory(new PersonValueFactory());
 		this.populateList();
@@ -132,11 +137,16 @@ public class PrimaryController {
 		});
 		this.resetView();
 	}
-
+	
+	@FXML
+    public void handleUnselect() throws IOException{ //to clear selection in table view and enable New button to add new person
+        this.resetView();
+    }
     
-    private void showPersonsDetails(Person person) {
+    private void showPersonsDetails(Person person) { //to fill the form with the details of the selected person
 		if (person == null) {
-//			this.formPane.setVisible(false);
+//			this.formPane.setVisible(false)
+			this.newButton.setDisable(false);
 			this.saveButton.setDisable(true);
 			this.deleteButton.setDisable(true);
 			this.nameField.setText("");
@@ -148,6 +158,7 @@ public class PrimaryController {
 	    	this.birthDateField.setValue(LocalDate.now());
 		} else {
 			this.formPane.setVisible(true);
+			this.newButton.setDisable(true);
 			this.saveButton.setDisable(false);
 			this.deleteButton.setDisable(false);
 			this.currentPerson = person;
@@ -162,7 +173,7 @@ public class PrimaryController {
 		}
 	}
 
-	private void resetView() {
+	private void resetView() { //to reset the view
 		this.showPersonsDetails(null);
 		this.refreshList();
 	}

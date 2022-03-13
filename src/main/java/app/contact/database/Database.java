@@ -7,6 +7,7 @@ import java.sql.Statement;
 
 public class Database{
 	public static void initDb(){
+		//Check to make sure table exists in database, if not create it.
 		try(Connection connection = Database.getConnection()){
 			try(Statement statement = connection.createStatement()){
 				statement.executeUpdate("CREATE TABLE IF NOT EXISTS person (\r\n"
@@ -30,6 +31,7 @@ public class Database{
 	
 	public static Connection getConnection() {
 		try {
+			//Get connection to sqlite db
 			return DriverManager.getConnection("jdbc:sqlite:sqlite.db");
 		}
 		catch(SQLException e) {

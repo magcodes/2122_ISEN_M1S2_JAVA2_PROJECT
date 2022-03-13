@@ -13,7 +13,7 @@ public class VcardSaver {
 	private Path path;
 	
 	public VcardSaver(){
-		this.path= Paths.get(new File(".").getAbsolutePath());
+		this.path= Paths.get(new File(".").getAbsolutePath()); //getting the path to the root of the project to store the vCard files
 	}
 	
 	public void save(Person person) {
@@ -29,9 +29,8 @@ public class VcardSaver {
 					EMAIL:%s
 					BDAY:%s
 					END:VCARD""".formatted(person.getNames().replace(" ", ";"), person.getFullName(),person.getNickName(),
-							person.getPhoneNumber(), person.getAddress(), person.getEmailAddress(), person.getBirthDate().toString().replace("-", ""));
-			Files.writeString(path.resolve(person.getId()+".vcf"), messageToWrite, StandardCharsets.UTF_8);
-			System.out.println(person.getId()+".vcf");
+							person.getPhoneNumber(), person.getAddress(), person.getEmailAddress(), person.getBirthDate().toString().replace("-", "")); //writing the vCard format in a string
+			Files.writeString(path.resolve(person.getId()+".vcf"), messageToWrite, StandardCharsets.UTF_8); //writing vCard file named according to the id in the database
 		}
 		catch(IOException e) {
 			e.printStackTrace();

@@ -23,11 +23,12 @@ public class PersonDao {
 	private VcardSaver vcardSaver = new VcardSaver();
 	
 	public List<Person> listPersons() {
+		//List to store persons from the database
 	    List<Person> listOfPersons = new ArrayList<Person>();
 	    try (Connection connection = Database.getConnection()) {
 	        try (Statement statement = connection.createStatement()) {
-	            try (ResultSet results = statement.executeQuery("SELECT * FROM person")) {
-	                while (results.next()) {
+	            try (ResultSet results = statement.executeQuery("SELECT * FROM person")) { //Run select query to retrieve all people from database
+	                while (results.next()) { //iterate over results and create person from it and then add each to the list
 	                    listOfPersons.add(new Person(results.getInt("idperson"),
 	                                            results.getString("lastname"),
 	                                            results.getString("firstname"),
@@ -64,7 +65,7 @@ public class PersonDao {
 	            statement.setDate(7, Date.valueOf(person.getBirthDate()));
 	            statement.executeUpdate();
 	            try ( ResultSet ids = statement.getGeneratedKeys()) {
-	            	if (ids.next()) {
+	            	if (ids.next()) { //getting id of the inserted person and return person object with the id included
 		                return new Person(ids.getInt(1), person.getLastName(),person.getFirstName(), person.getNickName(),
 		                		person.getPhoneNumber(), person.getAddress(), person.getEmailAddress(), person.getBirthDate());
 		            }
@@ -124,7 +125,8 @@ public class PersonDao {
 	public void exportPersons() {
 		DirectoryStream<Path> listOfPaths;
 		try {
-			listOfPaths = Files.newDirectoryStream(Paths.get(new File(".").getAbsolutePath()));
+			listOfPaths = Files.newDirectoryStream(Paths.get(new File(".").getAbsolutePath())); //getting the path of the root of the project to save the vCard files
+			//deleting the old vCard files created
 			for(Path file: listOfPaths) {
 				String filename = file.getFileName().toString();
 				int indexOfPeriod = filename.lastIndexOf(".");
@@ -136,6 +138,6 @@ public class PersonDao {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		new PersonDao().listPersons().stream().forEach(vcardSaver::save);
+		new PersonDao().listPersons().stream().forEach(vcardSaver::save); //saving vCard for each person
 	}
 }

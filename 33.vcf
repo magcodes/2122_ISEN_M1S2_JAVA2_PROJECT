@@ -1,0 +1,10 @@
+BEGIN:VCARD
+VERSION:4.0
+N:William;Darkwa
+FN:Darkwa William
+NICKNAME:WD
+TEL;TYPE=cell:+3371234567
+ADR;TYPE=home:;;Dummy Address;;;;
+EMAIL:william@test.com
+BDAY:20110311
+END:VCARD
